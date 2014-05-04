@@ -7,6 +7,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BooleanWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -49,13 +50,13 @@ public class ImageDownloader extends Configured implements Tool {
 		job.setMapperClass(ImageDownloaderMapper.class);
 		job.setReducerClass(ImageDownloaderReducer.class);
 
-		// Set formats
-		job.setOutputKeyClass(BooleanWritable.class);
+	
+		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(Text.class);
 		job.setInputFormatClass(ImageDownloaderInputFormat.class);
 
-		//*************** IMPORTANT ****************\\
-		job.setMapOutputKeyClass(BooleanWritable.class);
+		
+		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(Text.class);
 		FileOutputFormat.setOutputPath(job, new Path(outputFile + "_output"));
 

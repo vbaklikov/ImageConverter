@@ -15,10 +15,12 @@ import java.io.StringReader;
 
 
 
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BooleanWritable;
 import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
@@ -75,13 +77,12 @@ public class ImageDownloaderMapper extends
 							if (Files.getFileExtension(file.getName()).compareTo(
 									".modca") == 0) {
 
-								//replace with actual implementation of conversion
-								FileInputStream fs = new FileInputStream(file);
-								hib.addImage(fs, ImageType.JPEG_IMAGE);
+								ModcaFile modca = new ModcaFile(file.getPath());
+								hib.addImage(modca.get_fs(), ImageType.JPEG_IMAGE);
 							}
 						}
 						hib.close();
-						context.write(new BooleanWritable(true), new Text(hib.getPath().toString()));
+						context.write(new Text(batchNumber), new Text(hib.getPath().toString()));
 
 						stopT = System.currentTimeMillis();
 						float el = (float) (stopT - startT) / 1000.0f;
